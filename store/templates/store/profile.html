@@ -1,0 +1,34 @@
+{% extends 'store/layout.html' %}
+
+{% block titulo %} {{request.user.username}} {% endblock titulo %}
+
+{% block body %}
+<div class="profile">
+  <div class="profile__header">
+    <div class="profile__header--info">
+      <p>{{ request.user.customer.name }}</p>
+      <p>{{ request.user.customer.email }}</p>
+    </div>
+  </div>
+  <div class="profile__body">
+    <h3>Mis pedidos</h3>
+    <div class="orders__board">
+      {% for order in orders %}
+      <div class="orders__board--card">
+        <div class="card--header">
+          <p>Fecha: {{ order.order.dateOrdered }}</p>
+          <p>Estado: {{ order.order.complete }}</p>
+          <p>Cliente: {{ order.order.customer }}</p>
+        </div>
+
+        <div class="card--board">
+          {% for item in order.product %}
+          <p>{{ item.name }}</p>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock body %}

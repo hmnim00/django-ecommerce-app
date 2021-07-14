@@ -1,0 +1,332 @@
+{% extends 'store/layout.html' %}
+{% load static %}
+{% block titulo %}Resumen{% endblock titulo %}
+{% block body %}
+<div class="cuenta">
+
+  <form id="form" name="checkoutForm">
+    {% csrf_token %}
+    <div class="cuenta__form">
+      <!-- digital -->
+      <div class="cuenta__form--digital">
+        <div class="form__input">
+          <label for="nombre">Nombre</label>
+          <input type="text" name="name" id="nombre" class="form__input--text" value="{{ request.user.customer.name }}"
+            required disabled>
+        </div>
+        <div class="form__input">
+          <label for="email">Correo electrónico</label>
+          <input type="email" name="email" id="email" class="form__input--text"
+            value="{{ request.user.customer.email }}" required disabled>
+        </div>
+      </div>
+      <!-- normal -->
+      <div class=" cuenta__form--delivery">
+        <h3>Datos para envío</h3>
+        <div class="form__input address">
+          <label for="direccion">Direccion</label>
+          <input type="text" name="address" id="direccion" class="form__input--text">
+          <p class="input--error address-error"></p>
+        </div>
+        <div class="form__input">
+          <label for="ciudad">Ciudad</label>
+          <input type="text" name="city" id="ciudad" class="form__input--text">
+          <p class="input--error city-error"></p>
+        </div>
+        <div class="form__input">
+          <label for="estado">Estado</label>
+          <input type="text" name="state" id="estado" class="form__input--text">
+          <p class="input--error state-error"></p>
+        </div>
+        <div class="form__input">
+          <label for="cp">CP</label>
+          <input type="text" name="zipcode" id="cp" class="form__input--text">
+          <p class="input--error zipcode-error"></p>
+        </div>
+        <div class="form__input">
+          <label for="telefono">Teléfono</label>
+          <input type="text" name="phone" id="telefono" class="form__input--text">
+          <p class="input--error phone-error"></p>
+        </div>
+      </div>
+
+      <div class="cuenta__form--footer">
+        <button class="btn__form">Continuar</button>
+      </div>
+    </div>
+  </form>
+
+  <div class="cuenta__pago hidden">
+    <!-- paypal -->
+    <!-- <div id="paypal-button-container"></div> -->
+    <button class="cuenta__pago--btn" id="make-payment">Hacer el pago</button>
+
+  </div>
+
+  <div class="cuenta__resumen">
+
+    <div class="cuenta__resumen--title">
+      <div class="cover">
+        <img src="{% static 'img/logo.png' %}" alt="">
+      </div>
+      <div class="title">
+        <h1>Resumen del pedido</h1>
+      </div>
+    </div>
+
+    <div class="cuenta__resumen--header">
+      <div class="tile--producto">
+        <span class="single">Producto</span>
+        <!-- <span class="multi">Productos</span> -->
+      </div>
+
+      <div class="tile--precio">
+        <span>Precio</span>
+      </div>
+
+      <div class="tile--cantidad">
+        <span>Cantidad</span>
+      </div>
+    </div>
+    <!-- TODO foreach -->
+    {% for item in items %}
+    <div class="cuenta__resumen--body">
+      <div class="body--title">
+        <span>{{ item.product.name }}</span>
+        {% if item.product.digital %}
+        <span class="is-digital">Digital</span>
+        {% endif %}
+      </div>
+
+      <div class="body--precio">
+        <span>MX${{ item.product.price }}</span>
+      </div>
+
+      <div class="body--cantidad">
+        <span>{{ item.quantity }}</span>
+      </div>
+    </div>
+    {% endfor %}
+
+    <div class="cuenta__resumen--footer">
+      <div class="footer--count">
+        <span>Productos: </span>
+        <span class="numero">{{ order.getCartItems}}</span>
+      </div>
+
+      <div class="footer--total">
+        <span>Total: </span>
+        <span class="numero">MX${{ order.getCartTotal }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- paypal -->
+<!-- <script src="https://www.paypal.com/sdk/js?client-id=test&currency=MXN">
+</script>
+
+<script>
+  let total = '{{ order.getCartTotal }}'
+  // Render the PayPal button into #paypal-button-container
+  paypal.Buttons({
+
+    // Set up the transaction
+    createOrder: function (data, actions) {
+      return actions.order.create({
+        purchase_units: [{
+          amount: {
+            "currency_code": "MXN",
+            "value": parseFloat(total).toFixed(2)
+          }
+        }]
+      });
+    },
+
+    // Finalize the transaction
+    onApprove: function (data, actions) {
+      return actions.order.capture().then(function (details) {
+        // Show a success message to the buyer
+        alert('Transaction completed by ' + details.payer.name.given_name + '!');
+        submitFormData()
+      });
+    }
+
+
+  }).render('#paypal-button-container');
+</script> -->
+
+<script type="text/javascript">
+  let shipping = '{{ order.shipping }}'
+  let total = '{{ order.getCartTotal }}'
+
+  if (shipping == 'False') document.querySelector('.cuenta__form--delivery').innerHTML = ''
+
+  // usuario registrado
+  if (shipping == 'False' && user != 'AnonymousUser') {
+    document.querySelector('.cuenta__form--delivery').innerHTML = ''
+  }
+
+  // usuario sin registro
+
+  let form = document.querySelector('#form');
+
+  csrftoken = form.getElementsByTagName('input')[0].value
+  // console.log('New token: ', form.getElementsByTagName('input')[0].value)
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (shipping == 'True') {
+      validateForm();
+      if (validateForm()) {
+        document.querySelector('.btn__form').classList.add('hidden');
+        document.querySelector('.cuenta__pago').classList.remove('hidden');
+      }
+    } else {
+      document.querySelector('.btn__form').classList.add('hidden');
+      document.querySelector('.cuenta__pago').classList.remove('hidden');
+    }
+    // console.log('Form submited');
+  })
+
+  document.querySelector('.cuenta__pago--btn').addEventListener('click', () => {
+    submitForm();
+  });
+
+  const submitForm = () => {
+    // console.log('Payment button clicked');
+
+    let userFormData = {
+      'name': null,
+      'email': null,
+      'total': total
+    }
+
+    let shippingInfo = {
+      'address': null,
+      'city': null,
+      'state': null,
+      'zipcode': null,
+      'phone': null
+    }
+
+    if (shipping != 'False') {
+      shippingInfo.address = form.address.value;
+      shippingInfo.city = form.city.value;
+      shippingInfo.state = form.state.value;
+      shippingInfo.zipcode = form.zipcode.value;
+      shippingInfo.phone = form.phone.value;
+    }
+
+    if (user == 'AnonymousUser') {
+      userFormData.name = form.name.value;
+      userFormData.email = form.email.value;
+    }
+
+    const url = '/process_order/'
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrftoken,
+      },
+      body: JSON.stringify({
+        'form': userFormData,
+        'shipping': shippingInfo
+      }),
+    }).then(res => {
+      res.json()
+    }).then(data => {
+      // console.log(data)
+      alert('Transacción completada');
+
+      cart = {}
+      document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+
+      window.location.href = "{% url 'store' %}"
+    })
+  }
+</script>
+
+<script type="text/javascript">
+  const name = (document.querySelector("#nombre").disabled = true);
+  const email = (document.querySelector("#email").disabled = true);
+  // errors
+  const addressError = document.querySelector(".address-error");
+  const cityError = document.querySelector(".city-error");
+  const stateError = document.querySelector(".state-error");
+  const zipcodeError = document.querySelector(".zipcode-error");
+  const phoneError = document.querySelector(".phone-error");
+
+  name.disabled = true;
+  email.disabled = true;
+
+  const validateForm = () => {
+    addressError.innerHTML = "";
+    cityError.innerHTML = "";
+    stateError.innerHTML = "";
+    zipcodeError.innerHTML = "";
+    phoneError.innerHTML = "";
+
+    const address = document.getElementById("direccion").value;
+    const city = document.getElementById("ciudad").value;
+    const state = document.getElementById("estado").value;
+    const zipcode = document.getElementById("cp").value;
+    const phone = document.getElementById("telefono").value;
+
+    // regex
+    const textREGEX = /^[A-Za-z]+$/;
+    const addressREGEX = /^[#.0-9a-zA-Z\s,-]+$/;
+    const postalRGEX = /^(?:0[1-9]|[1-4]\d|5[0-2])\d{3}$/;
+    const phoneRGEX =
+      /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
+
+    // check
+    const addressResult = addressREGEX.test(address);
+    const cityResult = textREGEX.test(city);
+    const stateResult = textREGEX.test(state);
+    const zipcodeResult = postalRGEX.test(zipcode);
+    const phoneResult = phoneRGEX.test(phone);
+
+    // campos vacíos
+    if (address.length == 0) addressError.innerHTML = "Este campo es requerido";
+    if (city.length == 0) cityError.innerHTML = "Este campo es requerido";
+    if (state.length == 0) stateError.innerHTML = "Este campo es requerido";
+    if (zipcode.length == 0) zipcodeError.innerHTML = "Este campo es requerido";
+    if (phone.length == 0) phoneError.innerHTML = "Este campo es requerido";
+
+    // validación
+    if (!phoneResult) {
+      phoneError.innerHTML = "Introducir un número de teléfono válido";
+      phone.innerHTML = "";
+      return false;
+    }
+
+    if (!addressResult) {
+      addressError.innerHTML = "Introducir una dirección válida";
+      address.innerHTML = "";
+      return false;
+    }
+
+    if (!cityResult) {
+      cityError.innerHTML = "Introducir una ciudad válida";
+      city.innerHTML = "";
+      return false;
+    }
+
+    if (!stateResult) {
+      stateError.innerHTML = "Introducit un estado válido";
+      state.innerHTML = "";
+      return false;
+    }
+
+    if (!zipcodeResult) {
+      zipcodeError.innerHTML = "Introducir código postal válido";
+      zipcode.innerHTML = "";
+      return false;
+    }
+
+    return true;
+  };
+</script>
+{% endblock body %}

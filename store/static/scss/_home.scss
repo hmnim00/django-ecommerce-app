@@ -1,0 +1,213 @@
+.tienda {
+  &__catalogo {
+    margin: 3rem 0;
+    display: grid;
+    grid-gap: 2rem;
+
+    &--item {
+      height: auto;
+      width: 280px;
+      max-width: 280px;
+      margin: 0 auto;
+      border-bottom: 1px solid #acacac;
+    }
+
+    .item__body {
+      position: relative;
+      display: flex;
+      align-items: center;
+
+      &--cover {
+        height: 250px;
+        width: 210px;
+        padding: .5rem;
+        margin: 0 auto;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+      }
+
+      &--type {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        border-radius: 6px;
+        color: #fff;
+        width: 4rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        @include bottom-shadow;
+        font-size: 14px;
+        z-index: 5;
+        overflow: hidden;
+
+        .type__digital {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 4px 6px;
+          background: #2d6eb8;
+        }
+
+        .type__oferta {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 4px 6px;
+
+          .iconify {
+            height: 1.4rem;
+            width: 1.4rem;
+          }
+
+          background: #ff0000;
+        }
+      }
+    }
+
+    .item__footer {
+      .info {
+        display: flex;
+        flex-direction: column;
+
+        &__title {
+          padding: .5rem 0;
+
+          a {
+            color: #2d6eb8;
+            font-size: 19px;
+            @include transition-ease;
+
+            &:hover {
+              color: #1658a3;
+            }
+          }
+        }
+
+        &__categories {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+
+          .category {
+            padding: 2px 4px;
+            border-radius: 8px;
+            font-size: 11px;
+            color: #fff;
+            width: 5rem;
+            max-width: 5rem;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:not(:last-child) {
+              margin-right: .5rem;
+            }
+
+            .iconify {
+              margin-right: .5rem;
+            }
+          }
+
+          .ps {
+            background: #003087;
+          }
+
+          .xb {
+            background: #107c10;
+          }
+
+          .nd {
+            background: #e60012;
+          }
+
+          .td {
+            background: $background;
+          }
+        }
+
+        &__details {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+          padding: 1rem 0;
+
+          &--price {
+            font-size: 18px;
+          }
+
+          &--more {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            background: #2d6eb8;
+            border-radius: 6px;
+            outline: none;
+            border: none;
+            padding: 4px 8px;
+            cursor: pointer;
+            @include transition-ease;
+
+            span {
+              color: #fff;
+              font-size: 13px;
+            }
+
+            &:hover {
+              background: #1658a3;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &__paginacion {
+
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      ul {
+        list-style-type: none;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 1rem;
+
+        .pag__prev {
+          grid-column: 1/2;
+        }
+
+        .pag__next {
+          grid-column: 2/3;
+        }
+
+        .pag__prev,
+        .pag__next {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        li {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .arrow {
+            font-size: 1.4rem;
+          }
+        }
+      }
+    }
+  }
+}

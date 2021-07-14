@@ -1,0 +1,83 @@
+{% extends 'store/layout.html' %}
+
+{% block body %}
+<div class="tienda">
+
+  <div class="tienda__catalogo">
+    <!-- item -->
+    <!-- TODO foreach -->
+    {% for product in products %}
+    <div class="tienda__catalogo--item">
+      <!-- header -->
+      <div class="item__body">
+        <div class="item__body--cover">
+          <img src="{{ product.image }}" alt="producto-vista">
+        </div>
+        <div class="item__body--type">
+          {% if product.digital %}
+          <span class="type__digital">digital</span>
+          {% endif %}
+          <!-- <span class="type__oferta"><span class="iconify" data-icon="foundation:burst-sale" data-inline="false"
+              style="color: #fff;"></span> 76%</span> -->
+        </div>
+      </div>
+      <!-- info -->
+      <div class="item__footer">
+        <div class="info">
+          <div class="info__categories">
+            {% if product.category == 'playstation' %}
+            <span class="category ps"><span class="iconify" data-icon="cib:playstation" data-inline="false"
+                style="color: #fff;"></span> Playstation</span>
+            {% elif product.category == 'xbox' %}
+            <span class="category xb"><span class="iconify" data-icon="cib:xbox" data-inline="false"
+                style="color: #fff;"></span> Xbox</span>
+            {% elif product.category == 'nintendo' %}
+            <span class="category nd"><span class="iconify" data-icon="cib:nintendo" data-inline="false"
+                style="color: #fff;"></span> Nintendo</span>
+            {% elif product.category == 'otro' %}
+            <span class="category td"><span class="iconify" data-icon="fontisto:world" data-inline="false"
+                style="color: #fff;"></span> Otro</span>
+            {% endif %}
+          </div>
+          <div class="info__title">
+            <p>{{ product.name }}</p>
+          </div>
+          <div class="info__details">
+            <span class="info__details--price">MX${{ product.price }}</span>
+            {% if request.user.is_authenticated %}
+            <button data-product={{ product.id }} data-action="add" class="info__details--more carrito-act">
+              <span>Agregar al carrito</span>
+              <!-- <span>Eliminar del carrito</span> -->
+            </button>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="tienda__paginacion">
+    <nav class="pagination">
+      <ul>
+        {% if products.has_previous %}
+        <li class="pag__prev">
+          <a href="?page={{ products.previous_page_number }}" class="link" aria-label="Anterior">
+            <span class="arrow" aria-hidden="true">&laquo;</span>
+            <span>Anterior</span>
+          </a>
+        </li>
+        {% elif products.has_next %}
+        <li class="pag__next">
+          <a href="?page={{ products.next_page_number }}" class="link" aria-label="Anterior">
+            <span>Siguiente</span>
+            <span class="arrow" aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+
+</div>
+{% endblock body %}

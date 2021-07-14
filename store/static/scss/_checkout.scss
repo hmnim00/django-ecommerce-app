@@ -1,0 +1,220 @@
+.cuenta {
+  display: grid;
+  align-items: center;
+
+  &__form {
+
+    &--digital,
+    &--delivery {
+      padding: 1rem 3rem;
+      border-bottom: 1px dashed #c2c2c2;
+
+      .form__input {
+        display: flex;
+        flex-direction: column;
+
+        label {
+          color: #8f8f8f;
+          font-size: 16px;
+          font-weight: 300;
+          margin-bottom: 5px;
+        }
+
+        &--text {
+          padding: 8px;
+          border-radius: 6px;
+          outline: none;
+          border: 1px solid #acacac;
+          @include transition-ease;
+
+          &:focus {
+            border: 1px solid #272727;
+          }
+        }
+
+        &:not(:first-child) {
+          margin-top: 12px;
+        }
+
+        .input--error {
+          font-family: 'Roboto', sans-serif;
+          padding-left: 1rem;
+          font-weight: 400;
+          font-size: 14px;
+          color: #ff4949;
+        }
+      }
+    }
+
+    &--footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 0;
+
+      .btn__form {
+        padding: 8px 11px;
+        background: #2d6eb8;
+        border-radius: 6px;
+        font-size: 1rem;
+        color: #fff;
+        cursor: pointer;
+        border: none;
+        cursor: pointer;
+        @include bottom-shadow;
+        @include transition-ease;
+
+        &:hover {
+          background: #1658a3;
+        }
+      }
+    }
+  }
+
+  &__pago {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &--btn {
+      cursor: pointer;
+      padding: 8px 11px;
+      background: #2d6eb8;
+      border-radius: 6px;
+      font-size: 1rem;
+      color: #fff;
+      cursor: pointer;
+      border: none;
+      cursor: pointer;
+      @include bottom-shadow;
+      @include transition-ease;
+
+      &:hover {
+        background: #1658a3;
+      }
+    }
+  }
+
+  &__resumen {
+    margin-top: 2rem;
+    padding: 1rem 2rem;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    border: 1px dashed #acacac;
+
+    &--title {
+      margin-bottom: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      .cover {
+        height: 40px;
+
+        img {
+          height: 100%;
+          opacity: .6;
+        }
+      }
+
+      .title {
+        margin-top: .5rem;
+        font-size: 1.2rem;
+      }
+    }
+
+    &--header,
+    &--body {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 1rem;
+      border-bottom: 1px solid #d8d8d8;
+      padding: 5px 0;
+    }
+
+    &--header {
+      .tile--producto {
+        grid-column: 1/3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .tile--precio {
+        grid-column: 3/4;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .tile--cantidad {
+        grid-column: 4/5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    &--body {
+      .body--title {
+        grid-column: 1/3;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .is-digital {
+          margin-left: 8px;
+          padding: 0 5px;
+          border-radius: 5px;
+          border: 1px solid #949494;
+          background: #dddddd;
+          color: #5c5c5c;
+          font-size: 13px;
+          font-weight: 400;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+
+      .body--precio {
+        grid-column: 3/4;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .body--cantidad {
+        grid-column: 4/5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    &--footer {
+      padding: 2rem 0 0 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 19px;
+
+      .footer--count,
+      .footer--total {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 1rem;
+        color: #686868;
+
+        .numero {
+          color: #272727;
+          font-size: 1.4rem;
+        }
+      }
+    }
+  }
+}

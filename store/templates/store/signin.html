@@ -1,0 +1,48 @@
+{% extends 'store/layout.html' %}
+{% load static %}
+{% block titulo %}Acceso{% endblock titulo %}
+
+{% block body %}
+<div class="sign-form">
+
+  <div class="sign-form__header">
+    <div class="cover">
+      <img src="{% static 'img/logo.png' %}" alt="logo">
+    </div>
+    <div class="text">
+      <span>Acceso</span>
+    </div>
+  </div>
+
+  <div class="sign-form__body">
+    {% if error %}
+    <div class="error-area">
+      <p class="error-area__txt">{{ error }}</p>
+    </div>
+    {% endif %}
+
+    <form action="{% url 'signin' %}" method="POST">
+      {% csrf_token %}
+      <div class="form">
+        <div class="form--campos">
+          <div class="form__input">
+            <label for="username">Usuario</label>
+            <input type="text" name="username" id="username" class="form__input--text">
+          </div>
+          <div class="form__input">
+            <label for="password">Contraseña</label>
+            <input type="password" name="password" id="password" class="form__input--text">
+          </div>
+          <div class="form__input">
+            <button type="submit" class="form__input--btn">Acceder</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="sign-form__footer">
+    <span>¿No tienes una cuenta? <a href="{% url 'signup' %}">Regístrate aquí</a>.</span>
+  </div>
+</div>
+{% endblock body %}

@@ -1,0 +1,85 @@
+{% extends 'store/layout.html' %}
+{% load static %}
+{% block titulo %}Carrito{% endblock titulo %}
+{% block body %}
+<div class="carrito">
+  <div class="carrito__title">
+    <span class="iconify" data-icon="bx:bxs-cart" data-inline="false" style="color: #272727;"></span>
+    <p>Carrito {% if order.getCartItems <= 0 %}vacio {% endif %}</p>
+  </div>
+
+  {% if order.getCartItems > 0 %}
+
+  <div class="carrito__total">
+    <div class="carrito__total--cantidad">
+      <p>Productos:</p>
+      <span>{{ order.getCartItems }}</span>
+    </div>
+    <div class="carrito__total--precio">
+      <p>Total:</p>
+      <span>MX${{ order.getCartTotal }}</span>
+    </div>
+    <div class="carrito__continue">
+      <div class="continue--button">
+        <a href="{% url 'checkout' %}" class="btn">Continuar al pago</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="carrito__list">
+    <!-- header -->
+    <div class="pr__header">
+      <div class="tile--cover">Producto</div>
+      <div class="tile--precio">Precio unitario</div>
+      <div class="tile--cantidad">Cantidad</div>
+      <div class="tile--total">Total</div>
+    </div>
+    <!-- TODO foreach -->
+    {% for item in items %}
+    <div class="pr__body">
+      <div class="body--product">
+        <div class="nombre">
+          {{ item.product.name }}
+        </div>
+        <div class="cover">
+          <img src="{{ item.product.image }}" alt="producto-vista">
+        </div>
+      </div>
+      <div class="body--precio">
+        <span>MX${{ item.product.price }}</span>
+      </div>
+      <div class="body--cantidad">
+        <span>{{ item.quantity }}</span>
+        <div class="total__item">
+          <button data-product={{ item.product.id }} data-action="remove" class="btn carrito-act">
+            <span class="iconify" data-icon="akar-icons:minus" data-inline="false"></span>
+          </button>
+          <button data-product={{ item.product.id }} data-action="add" class="btn carrito-act">
+            <span class="iconify" data-icon="akar-icons:plus" data-inline="false"></span>
+          </button>
+        </div>
+      </div>
+      <div class="body--total"><span>Total: </span>MX${{ item.getTotal }}</div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="carrito__continue">
+    <div class="continue--button">
+      <a href="{% url 'checkout' %}" class="btn">Continuar al pago</a>
+    </div>
+  </div>
+
+  {% else %}
+  <div class="carrito__empty">
+    <div class="carrito__empty--header">
+      <img src="{% static 'img/logo.png' %}" alt="cover">
+    </div>
+    <div class="carrito__empty--body">
+      <h2>No se han agregado elementos al carrito</h2>
+      <p><a href="{% url 'store' %}">Regresa a la tienda</a> para agregar productos</p>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock body %}

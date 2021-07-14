@@ -1,0 +1,116 @@
+.sign-form {
+  // background: yellow;
+  margin: 0 auto;
+  width: 100%;
+  min-width: 280px;
+  max-width: 400px;
+
+  &__header {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 1rem;
+    margin: auto 0;
+    border-bottom: 1px solid #c2c2c2;
+    padding: .5rem 0;
+    background: #2d6eb8;
+    border-radius: 6px 6px 0 0;
+
+    .cover {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+
+      img {
+        height: 40px;
+        width: auto;
+      }
+    }
+
+    .text {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      font-size: 1.4rem;
+      color: #fff;
+    }
+  }
+
+  &__body {
+    padding: .2rem 1rem;
+    background: #f7f7f7;
+    border-radius: 0 0 6px 6px;
+    border-bottom: 1px solid #c2c2c2;
+
+    .error-area {
+      padding: .5rem 2rem;
+      color: #d45959;
+    }
+
+    .form {
+      padding-bottom: 1rem;
+
+      .form__input {
+        display: flex;
+        flex-direction: column;
+
+        label {
+          color: #8f8f8f;
+          font-size: 15px;
+          font-weight: 300;
+          margin-bottom: 5px;
+        }
+
+        &--text {
+          padding: 8px;
+          border-radius: 6px;
+          outline: none;
+          border: 1px solid #acacac;
+          @include transition-ease;
+
+          &:focus {
+            border: 1px solid #272727;
+          }
+        }
+
+        &:not(:first-child) {
+          margin-top: 12px;
+        }
+
+        &--btn {
+          margin-top: 1rem;
+          padding: 8px 11px;
+          background: #2d6eb8;
+          border-radius: 6px;
+          font-size: 1rem;
+          color: #fff;
+          cursor: pointer;
+          border: none;
+          cursor: pointer;
+          @include bottom-shadow;
+          @include transition-ease;
+
+          &:hover {
+            background: #1658a3;
+          }
+        }
+      }
+
+    }
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 0;
+
+    a {
+      color: #2d6eb8;
+      @include transition-ease;
+
+      &:hover {
+        color: #1658a3;
+      }
+    }
+  }
+}

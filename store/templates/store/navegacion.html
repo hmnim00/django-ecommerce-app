@@ -1,0 +1,38 @@
+{% load static %}
+<header>
+  <div class="container">
+    <div class="branding">
+      <a href="{% url 'store' %}" class="branding__cover">
+        <img src="{% static 'img/logo.png' %}" alt="branding-logo">
+      </a>
+    </div>
+    {% if request.user.is_authenticated %}
+    <div class="cart">
+      <a href="{% url 'cart' %}" class="cart__cover">
+        <img src="{% static 'img/cart.png' %}" alt="cart-logo">
+        <span class="cart__cover--count">{{ cartItems }}</span>
+      </a>
+    </div>
+    {% endif %}
+
+    <nav class="menu">
+      <ul class="menu-nav">
+        {% if request.user.is_authenticated %}
+        <li class="menu-nav__item">
+          <a class="menu-nav__link">{{ request.user.username }}</a>
+        </li>
+        <li class="menu-nav__item">
+          <a href="{% url 'signout' %}" class="menu-nav__link">Salir</a>
+        </li>
+        {% else %}
+        <li class="menu-nav__item">
+          <a href="{% url 'signup' %}" class="menu-nav__link">Registro</a>
+        </li>
+        <li class="menu-nav__item">
+          <a href="{% url 'signin' %}" class="menu-nav__link">Acceder</a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+</header>
